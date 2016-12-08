@@ -28,6 +28,9 @@ var file = new staticServer.Server('./public');
 require('http').createServer(function (request, response) {
     request.addListener('end', function () {
         if(request.url == '/tree'){
+            response.setHeader('Access-Control-Allow-Origin', '*');
+            response.setHeader('Access-Control-Allow-Methods', 'GET');
+            response.setHeader('Access-Control-Allow-Headers', 'Content-Type');
             response.writeHead(200, {"Content-Type": "application/json"});
             response.end(JSON.stringify(directoryTree('./public/Home')));
         } else file.serve(request, response);
