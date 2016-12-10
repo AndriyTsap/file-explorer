@@ -10,7 +10,7 @@ export class DataService {
             var xhr = new XMLHttpRequest();
             xhr.open('get', uri);
             xhr.onload = function () {
-                if (this.status == 200) {
+                if (this.status === 200) {
                     resolve(this.response);
                 } else {
                     var error = new Error(this.statusText);
@@ -21,6 +21,6 @@ export class DataService {
                 reject(new Error("Network Error"));
             };
             xhr.send();
-        });;
+        });
     }
 }

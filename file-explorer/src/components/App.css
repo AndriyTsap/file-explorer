@@ -1,5 +1,13 @@
-.App {
-  text-align: center;
+ul {
+  margin: 0;
+  padding-left: 1em;
+  list-style-type: none; 
+}
+
+li {
+    cursor: pointer;
+    left: 0;
+    border-radius: 4px;
 }
 
 .App-logo {

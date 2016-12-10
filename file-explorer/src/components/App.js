@@ -1,18 +1,36 @@
 import React, {Component} from 'react';
-import { User } from '../core/domain/user';
-import { DataService } from '../core/services/data.service';
+import {DataService} from '../core/services/data.service';
+import FolderComponent from './FolderComponent'
+import {Folder} from '../core/domain/folder';
 import logo from '../logo.svg';
 import './App.css';
 
 class App extends Component {
 
-  constructor(){
+  catalogs = [];
+  name = 'Taras';
+
+  constructor(dataService) {
     super();
-    var dataService = new DataService();
-    dataService.get().then(data => console.log(data), 
-      err => console.log(err));
-    var user = new User('Andriy', 18);
-    console.log(user);
+    dataService = new DataService();
+    dataService
+      .get()
+      .then(data => {
+        this.initTree(data)
+      }, err => console.log(err));
+  }
+
+  initTree(data) {
+    var root = new Folder(JSON.parse(data));
+
+    this
+      .catalogs
+      .push(
+        <FolderComponent key={root.id} children={root.children} name={root.name}></FolderComponent>
+      );
+
+    this.setState(this.catalogs);
+
   }
 
   render() {
@@ -20,16 +38,18 @@ class App extends Component {
       <div className="App">
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo"/>
-          <h2>Welcome to React1</h2>
+          <h2>Welcome to React</h2>
         </div>
-        <p className="App-intro">
-          To get started, edit
-          <code>src/App.js</code>
-          and save to reload.
-        </p>
+        <aside id="fileTree">
+          <ul>
+            {this.catalogs}
+          </ul>
+        </aside>
       </div>
     );
   }
 }
+
+
 
 export default App;
