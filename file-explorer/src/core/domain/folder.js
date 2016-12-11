@@ -1,5 +1,6 @@
 export class Folder{
     name = "";
+    isExtracted = false;
     children = [];
 
     constructor(data){

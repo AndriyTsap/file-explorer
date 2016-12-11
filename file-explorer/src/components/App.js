@@ -26,7 +26,7 @@ class App extends Component {
     this
       .catalogs
       .push(
-        <FolderComponent key={root.id} children={root.children} name={root.name}></FolderComponent>
+        <FolderComponent key={root.id} obj={root}></FolderComponent>
       );
 
     this.setState(this.catalogs);
@@ -40,16 +40,22 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo"/>
           <h2>Welcome to React</h2>
         </div>
-        <aside id="fileTree">
-          <ul>
-            {this.catalogs}
-          </ul>
-        </aside>
+        <div className="container-fluid">
+          <div className="row">
+          </div>
+          <div className="row">
+          <div className="col-sm-5">
+          <aside id="fileTree">
+            <ul>
+              {this.catalogs}
+            </ul>
+          </aside>
+          </div>
+          </div>
+        </div>
       </div>
     );
   }
 }
-
-
 
 export default App;
