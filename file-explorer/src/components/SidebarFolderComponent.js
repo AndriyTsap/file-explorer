@@ -1,31 +1,39 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
-class FolderComponent extends Component {
+class SidebarFolderComponent extends Component {
 
     arrowRight = 'fa fa-caret-right fa-fw';
     arrowDown = 'fa fa-caret-down fa-fw';
     arrow = this.arrowRight;
-    folder = 'fa fa-folder fa-fw';;
+    folder = 'fa fa-folder fa-fw';
     childrenSafe;
     children = [];
+
 
     componentDidMount() {
         if (this.props.obj.isExtracted) {
             this.arrow = this.arrowDown;
-            this.setState({folder: this.folder});
+            this.setState({ folder: this.folder });
             this
                 .extractFolder();
         }
     }
 
-    handleArrowClick(e) {
+    handleFolderDoubleClick(e) {
         e.stopPropagation();
+        this.props.dbClickHandler(this.props.obj);
+        this.handleArrowClick();
+    }
+
+    handleArrowClick(e) {
+        if (e)
+            e.stopPropagation();
         if (!this.props.obj.isExtracted) {
             this.extractFolder();
         } else {
             this.closeFolder();
         }
-        
+
     }
 
     extractFolder() {
@@ -41,14 +49,14 @@ class FolderComponent extends Component {
                         this
                             .children
                             .push(
-                                <FolderComponent obj={c}></FolderComponent>
+                            <SidebarFolderComponent obj={c} dbClickHandler={this.props.dbClickHandler}></SidebarFolderComponent>
                             );
                     }
                 });
             }
         }
-        this.setState({arrow: this.arrow});
-        this.setState({children: this.children});
+        this.setState({ arrow: this.arrow });
+        this.setState({ children: this.children });
     }
 
     closeFolder(e) {
@@ -56,8 +64,8 @@ class FolderComponent extends Component {
         this.props.obj.isExtracted = false;
         this.childrenSafe = this.children;
         this.children = [];
-        this.setState({arrow: this.arrow});
-        this.setState({children: this.children});
+        this.setState({ arrow: this.arrow });
+        this.setState({ children: this.children });
     }
 
     render() {
@@ -65,15 +73,17 @@ class FolderComponent extends Component {
             <ul>
                 <li>
                     <i className={this.arrow} onClick={this
-                    .handleArrowClick
-                    .bind(this)}></i>
-                    <i className={this.folder}></i>
-                    {this.props.obj.name}
-                    {this.children}
+                        .handleArrowClick
+                        .bind(this)}></i>
+                    <span className="folder" onDoubleClick={this.handleFolderDoubleClick.bind(this)}>
+                        <i className={this.folder}></i>
+                        {this.props.obj.name}
+                        {this.children}
+                    </span>
                 </li>
             </ul>
         );
     }
 }
 
-export default FolderComponent;
+export default SidebarFolderComponent;

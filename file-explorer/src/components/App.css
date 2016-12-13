@@ -1,3 +1,14 @@
+.folder{
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.sidebarCatalogsTree{
+  
+}
+
 ul {
   margin: 0;
   padding-left: .5em;
@@ -8,10 +19,6 @@ li {
     cursor: pointer;
     padding-left: .5em;
     border-radius: 4px;
-}
-
-asside {
-  text-align: left;
 }
 
 .App-logo {
