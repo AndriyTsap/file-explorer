@@ -49,7 +49,7 @@ class SidebarFolderComponent extends Component {
                         this
                             .children
                             .push(
-                            <SidebarFolderComponent obj={c} dbClickHandler={this.props.dbClickHandler}></SidebarFolderComponent>
+                            <SidebarFolderComponent key={c.name.toString()} obj={c} dbClickHandler={this.props.dbClickHandler}></SidebarFolderComponent>
                             );
                     }
                 });

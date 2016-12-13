@@ -2,10 +2,6 @@ import React, { Component } from 'react';
 
 class ContentFolderComponent extends Component {
 
-    constructor() {
-        super();
-    }
-
     folder = 'fa fa-folder fa-fw';
 
     handleFolderDoubleClick(e) {
