@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import PopupComponent from './PopupComponent';
 
 class ContentFileComponent extends Component {
 
     icon;
-    fileIcon = 'fa fa-file fa-fw';
+    file={};
+    fileIcon = 'fa fa-file-o fa-fw';
     textIcon = 'fa fa-file-text fa-fw';
-    imageIcon = 'fa fa-file-image fa-fw';
+    imageIcon = 'fa fa-file-image-o fa-fw';
     videoIcon = 'fa fa-file-video fa-fw';
     audioIcon = 'fa fa-file-audio-o fa-fw';
     archiveIcon = 'fa fa-file-archive fa-fw';
@@ -15,11 +15,7 @@ class ContentFileComponent extends Component {
     excelIcon = 'fa fa-file-excel fa-fw';
 
     componentWillMount() {
-        var res = this
-            .props
-            .obj
-            .name
-            .split('.');
+        var res = this.props.obj.name.split('.');
         var spread = res[res.length - 1];
         switch (spread) {
             case 'txt':
@@ -27,6 +23,7 @@ class ContentFileComponent extends Component {
                 this.icon = this.textIcon;
                 break;
             case 'mp3':
+                this.file.type='audio';
                 this.icon = this.audioIcon
                 break;
             case 'avi':
@@ -36,6 +33,7 @@ class ContentFileComponent extends Component {
             case 'jpg':
             case 'png':
             case 'jpeg':
+                this.file.type='image';
                 this.icon = this.imageIcon;
                 break;
             case 'rar':
@@ -54,7 +52,7 @@ class ContentFileComponent extends Component {
                 this.icon = this.excelIcon;
                 break;
             default:
-                this.icon = this.fileIcon;;
+                this.icon = this.fileIcon;
         }
 
         this.setState({icon: this.icon});
@@ -62,7 +60,8 @@ class ContentFileComponent extends Component {
 
     handleFileDoubleClick(e) {
         e.stopPropagation();
-        this.props.handleFileDoubleClick(this.props.obj);
+        this.file.name = this.props.obj.name;
+        this.props.handleFileDoubleClick(this.file);
     }
 
     render() {
@@ -70,16 +69,13 @@ class ContentFileComponent extends Component {
             <li>
                 <span
                     className="file"
-                    onDoubleClick={this
-                    .handleFileDoubleClick
-                    .bind(this)}>
+                    onDoubleClick={this.handleFileDoubleClick.bind(this)}>
                     <i className={this.icon}></i>
                     {this.props.obj.name}
                 </span>
             </li>
-        )
+        );
     };
-
 }
 
 export default ContentFileComponent;

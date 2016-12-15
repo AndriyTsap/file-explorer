@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 class ContentFolderComponent extends Component {
 
-    folder = 'fa fa-folder fa-fw';
+    folder = 'fa fa-folder-o fa-fw';
 
     handleFolderDoubleClick(e) {
         e.stopPropagation();

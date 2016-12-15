@@ -5,7 +5,7 @@ class SidebarFolderComponent extends Component {
     arrowRight = 'fa fa-caret-right fa-fw';
     arrowDown = 'fa fa-caret-down fa-fw';
     arrow = this.arrowRight;
-    folder = 'fa fa-folder fa-fw';
+    folder = 'fa fa-folder-o fa-fw';
     childrenSafe;
     children = [];
 
@@ -14,20 +14,22 @@ class SidebarFolderComponent extends Component {
         if (this.props.obj.isExtracted) {
             this.arrow = this.arrowDown;
             this.setState({ folder: this.folder });
-            this
-                .extractFolder();
+            this.extractFolder();
         }
     }
 
     handleFolderDoubleClick(e) {
         e.stopPropagation();
         this.props.dbClickHandler(this.props.obj);
-        this.handleArrowClick();
+        if (!this.props.obj.isExtracted) {
+            this.extractFolder();
+        } else {
+            this.closeFolder();
+        }
     }
 
     handleArrowClick(e) {
-        if (e)
-            e.stopPropagation();
+        e.stopPropagation();
         if (!this.props.obj.isExtracted) {
             this.extractFolder();
         } else {
@@ -46,10 +48,11 @@ class SidebarFolderComponent extends Component {
             if (childrens) {
                 childrens.forEach(c => {
                     if (c.children) {
-                        this
-                            .children
+                        this.children
                             .push(
-                            <SidebarFolderComponent key={c.name.toString()} obj={c} dbClickHandler={this.props.dbClickHandler}></SidebarFolderComponent>
+                            <SidebarFolderComponent key={c.name.toString()} obj={c}
+                                dbClickHandler={this.props.dbClickHandler}>
+                            </SidebarFolderComponent>
                             );
                     }
                 });
@@ -72,9 +75,7 @@ class SidebarFolderComponent extends Component {
         return (
             <ul>
                 <li>
-                    <i className={this.arrow} onClick={this
-                        .handleArrowClick
-                        .bind(this)}></i>
+                    <i className={this.arrow} onClick={this.handleArrowClick.bind(this)}></i>
                     <span className="folder" onDoubleClick={this.handleFolderDoubleClick.bind(this)}>
                         <i className={this.folder}></i>
                         {this.props.obj.name}

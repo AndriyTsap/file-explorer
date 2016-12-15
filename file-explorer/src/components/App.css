@@ -5,8 +5,8 @@
   user-select: none;
 }
 
-.sidebarCatalogsTree{
-  
+.breadcrumbs{
+  display:inline;  
 }
 
 ul {
@@ -41,3 +41,6 @@ li {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+
+
