@@ -6,13 +6,25 @@ class BreadcrumbsComponent extends Component {
     breadcrumbs = [];
     items = [];
 
+    s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    }
+
+    guid() {
+
+        return this.s4() + this.s4() + '-' + this.s4() + '-' + this.s4() + '-' +
+            this.s4() + '-' + this.s4() + this.s4() + this.s4();
+    }
+
     getBreadcrumbs() {
         return this.breadcrumbs;
     }
 
     createItem(content, clickHadndler) {
         return (
-            <span key={this.breadcrumbs.length.toString()}>
+            <span key={this.guid().toString()}>
                 <a onClick={clickHadndler}>{content}</a>
                 <span>></span>
             </span>
@@ -22,7 +34,7 @@ class BreadcrumbsComponent extends Component {
     push(item) {
         if (this.items[this.items.length - 1]) {
             this.items[this.items.length - 1] = (
-                this.createItem(this.breadcrumbs[this.breadcrumbs.length - 1].name, this.handleClick.bind(this))
+                this.createItem(this.breadcrumbs[this.breadcrumbs.length - 1].name, this.handleClick.bind(this, this.breadcrumbs[this.breadcrumbs.length - 1]))
             );
         }
 
@@ -52,7 +64,7 @@ class BreadcrumbsComponent extends Component {
         while (folder.father) {
             folder = folder.father;
             this.breadcrumbs.unshift(folder);
-            this.items.unshift(this.createItem(folder.name, this.handleClick.bind(this)));
+            this.items.unshift(this.createItem(folder.name, this.handleClick.bind(this, folder)));
         }
 
         var root = { name: 'public', children: [folder] };
@@ -63,8 +75,9 @@ class BreadcrumbsComponent extends Component {
         this.setState({ items: this.items });
     }
 
-    handleClick() {
-        console.log("sdasd");
+    handleClick(folder) {
+        console.log(folder);
+        this.props.handleClick(folder);
     }
 
     render() {

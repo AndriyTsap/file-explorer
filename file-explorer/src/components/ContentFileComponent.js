@@ -7,7 +7,7 @@ class ContentFileComponent extends Component {
     fileIcon = 'fa fa-file-o fa-fw';
     textIcon = 'fa fa-file-text fa-fw';
     imageIcon = 'fa fa-file-image-o fa-fw';
-    videoIcon = 'fa fa-file-video fa-fw';
+    videoIcon = 'fa fa-file-video-o fa-fw';
     audioIcon = 'fa fa-file-audio-o fa-fw';
     archiveIcon = 'fa fa-file-archive fa-fw';
     pdfIcon = 'fa fa-file-pdf fa-fw';
@@ -20,6 +20,7 @@ class ContentFileComponent extends Component {
         switch (spread) {
             case 'txt':
             case 'csv':
+                this.file.type='text'
                 this.icon = this.textIcon;
                 break;
             case 'mp3':
@@ -28,6 +29,7 @@ class ContentFileComponent extends Component {
                 break;
             case 'avi':
             case 'mp4':
+                this.file.type='video'
                 this.icon = this.videoIcon
                 break;
             case 'jpg':
@@ -59,9 +61,9 @@ class ContentFileComponent extends Component {
     }
 
     handleFileDoubleClick(e) {
-        e.stopPropagation();
         this.file.name = this.props.obj.name;
         this.props.handleFileDoubleClick(this.file);
+        e.stopPropagation();
     }
 
     render() {

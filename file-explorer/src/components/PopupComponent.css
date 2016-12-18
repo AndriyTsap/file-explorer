@@ -17,12 +17,19 @@
 	margin-top: -200px;
 	overflow: hidden;
 	z-index: 2000;
+
 	width: 80%;
-    height: 60%;
+    height: 80%;
 	padding: 0px;
 	margin-left: -40%;
-    margin-top: -30%;
+    margin-top: -20%;
 }
+
+#image {
+	width: 800px;
+	height: 450px;
+}
+
 #win button {
 	float: right;
 	line-height: 20px;
@@ -36,17 +43,24 @@
 	color: navy;
 	text-decoration: underline;
 }
-#win h3 {
-	text-align: center;
-	color: #555;
+#win h2 {
+	float: left;
 }
+
+.header{
+	display: block;
+	height: 20%;
+}
+
+video{
+	height: 450px;
+	width: 800px;
+}
+
 .content {
 	padding: 0 1em;
 	border-top: 1px solid #ccc;
 	border-bottom: 1px solid #ccc;
 	background: WhiteSmoke;
-}
-
-.image{
-	background-size: cover; /* Масштабируем фон */
+	text-align: center;
 }

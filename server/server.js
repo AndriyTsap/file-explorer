@@ -23,7 +23,7 @@ function directoryTree (path, extensions) {
     return item;
 }
 
-var file = new staticServer.Server('./public');
+var file = new staticServer.Server('../file-explorer/public');
 
 require('http').createServer(function (request, response) {
     request.addListener('end', function () {
@@ -32,7 +32,7 @@ require('http').createServer(function (request, response) {
             response.setHeader('Access-Control-Allow-Methods', 'GET');
             response.setHeader('Access-Control-Allow-Headers', 'Content-Type');
             response.writeHead(200, {"Content-Type": "application/json"});
-            response.end(JSON.stringify(directoryTree('./public/Home')));
+            response.end(JSON.stringify(directoryTree('../file-explorer/public/Home')));
         } else file.serve(request, response);
     }).resume();
 }).listen(process.env.PORT || 5000);

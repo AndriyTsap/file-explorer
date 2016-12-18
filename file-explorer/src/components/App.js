@@ -121,6 +121,11 @@ class App extends Component {
     }
   }
 
+  handleBreadcrumbClick(folder){
+    this.handleFolderDoubleClick(folder);
+    this.breadcrumbsComponent.reset(folder);
+  }
+
   render() {
     return (
       <div className="App">
@@ -131,7 +136,7 @@ class App extends Component {
         <div className="container-fluid">
           <div className="row">
             <div className="col-md-2 col-sm-2 breadcrumbs">
-              <BreadcrumbsComponent ref={(breadcrumbsComponent) => {
+              <BreadcrumbsComponent handleClick={this.handleBreadcrumbClick.bind(this)} ref={(breadcrumbsComponent) => {
                 this.breadcrumbsComponent = breadcrumbsComponent;
               }
               }></BreadcrumbsComponent>
