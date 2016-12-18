@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 class ContentFileComponent extends Component {
 
     icon;
-    file={};
+    file = {};
     fileIcon = 'fa fa-file-o fa-fw';
     textIcon = 'fa fa-file-text fa-fw';
     imageIcon = 'fa fa-file-image-o fa-fw';
@@ -20,22 +20,22 @@ class ContentFileComponent extends Component {
         switch (spread) {
             case 'txt':
             case 'csv':
-                this.file.type='text'
+                this.file.type = 'text'
                 this.icon = this.textIcon;
                 break;
             case 'mp3':
-                this.file.type='audio';
+                this.file.type = 'audio';
                 this.icon = this.audioIcon
                 break;
             case 'avi':
             case 'mp4':
-                this.file.type='video'
+                this.file.type = 'video'
                 this.icon = this.videoIcon
                 break;
             case 'jpg':
             case 'png':
             case 'jpeg':
-                this.file.type='image';
+                this.file.type = 'image';
                 this.icon = this.imageIcon;
                 break;
             case 'rar':
@@ -57,7 +57,7 @@ class ContentFileComponent extends Component {
                 this.icon = this.fileIcon;
         }
 
-        this.setState({icon: this.icon});
+        this.setState({ icon: this.icon });
     }
 
     handleFileDoubleClick(e) {
@@ -69,11 +69,16 @@ class ContentFileComponent extends Component {
     render() {
         return (
             <li>
-                <span
-                    className="file"
+                <span className="file"
                     onDoubleClick={this.handleFileDoubleClick.bind(this)}>
                     <i className={this.icon}></i>
                     {this.props.obj.name}
+                </span>
+                <span className="date">
+                    {this.props.obj.birthTime}
+                </span>
+                <span className="size">
+                    {this.props.obj.size}
                 </span>
             </li>
         );

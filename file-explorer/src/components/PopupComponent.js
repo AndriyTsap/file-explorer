@@ -78,24 +78,8 @@ class PopupComponent extends Component {
                 </video>);
             }
         }
-        if (this.props.file.type === "text") {
-            this.readFile(path);
-        }
-    }
-
-    readFile(file) {
-        file = "file://../../"+file;
-        var rawFile = new XMLHttpRequest();
-        rawFile.open("GET", file, false);
-        rawFile.onreadystatechange = function () {
-            if (rawFile.readyState === 4) {
-                if (rawFile.status === 200 || rawFile.status == 0) {
-                    var allText = rawFile.responseText;
-                    alert(allText);
-                }
-            }
-        }
-        rawFile.send(null);
+        this.content = (<h3>Previeving this type of files is not supported</h3>);
+        this.setState({content: this.content});
     }
 
     closeModal() {
@@ -103,7 +87,6 @@ class PopupComponent extends Component {
         if (this.props.file.type === "video" || this.props.file.type === "audio") {
             document.getElementById('media').pause();
         }
-        this.setState({ content: this.content });
     }
 
     render() {

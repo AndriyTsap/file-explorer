@@ -15,6 +15,8 @@ class App extends Component {
   modal;
   breadcrumbsComponent;
   popupComponent;
+  foldersCount;
+  filesCount;
 
   constructor(dataService) {
     super();
@@ -47,11 +49,11 @@ class App extends Component {
     );
   }
 
-  createContentCatalog(key, object) {
+  createContentCatalog(key, object, clickHandler) {
     return (
       <ContentFolderComponent
         key={key} obj={object}
-        dbClickHandler={this.handleContentFolderDoubleClick.bind(this)}>
+        dbClickHandler={clickHandler.bind(this)}>
       </ContentFolderComponent>
     );
   }
@@ -91,16 +93,32 @@ class App extends Component {
     this.handleFolderDoubleClick(folder);
   }
 
+  handleGoBackClick(){
+    var breadcrumbs = this.breadcrumbsComponent.getBreadcrumbs();
+    this.breadcrumbsComponent.reset(breadcrumbs[breadcrumbs.length-2]);
+  }
+
   handleFolderDoubleClick(folder) {
+    this.foldersCount = 0;
+    this.filesCount = 0;
     this.contentCatalogs = [];
+    this.contentCatalogs.push(
+      this.createContentCatalog("..", {name: ".."})
+    );
     if (folder.children) {
       folder.children
         .forEach(c => {
           if (c.children) {
+            this.foldersCount++;
             this.contentCatalogs.push(
               this.createContentCatalog(c.name, c)
             );
-          } else {
+          }
+        });
+      folder.children
+        .forEach(c => {
+          if (!c.children) {
+            this.filesCount++;
             this.contentCatalogs.push(
               this.createContentFile(c.name, c)
             );
@@ -121,7 +139,7 @@ class App extends Component {
     }
   }
 
-  handleBreadcrumbClick(folder){
+  handleBreadcrumbClick(folder) {
     this.handleFolderDoubleClick(folder);
     this.breadcrumbsComponent.reset(folder);
   }
@@ -135,31 +153,56 @@ class App extends Component {
         </div>
         <div className="container-fluid">
           <div className="row">
-            <div className="col-md-2 col-sm-2 breadcrumbs">
+            <div className="col-md-6 col-sm-6 breadcrumbs">
               <BreadcrumbsComponent handleClick={this.handleBreadcrumbClick.bind(this)} ref={(breadcrumbsComponent) => {
                 this.breadcrumbsComponent = breadcrumbsComponent;
               }
               }></BreadcrumbsComponent>
             </div>
-            <div className="col-md-2 col-sm-2 breadcrumbs">
+            <div className="col-md-6 col-sm-6">
+              <div id="custom-search-input">
+                <div className="input-group col-md-12">
+                  <input type="text" className="  search-query form-control" placeholder="Search" />
+                  <span className="input-group-btn">
+                    <button className="btn btn-danger" type="button">
+                      <span className=" glyphicon glyphicon-search"></span>
+                    </button>
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
           <div className="row">
-            <div className="col-md-5 col-sm-5 sidebarCatalogsTree">
+            <div className="col-md-3 col-sm-3 sidebarCatalogsTree">
               <aside id="fileTree">
                 <ul>
                   {this.sidebarCatalogs}
                 </ul>
               </aside>
             </div>
-            <div className="col-md-5 col-sm-5 sidebarCatalogsTree">
+            <div className="col-md-9 col-sm-9 contentCatalogsTree">
               <ul>
                 {this.contentCatalogs}
               </ul>
             </div>
           </div>
+          <div className="row">
+            <div className="col-md-12 col-sm-12 foother">
+            <span>
+              <span>
+                Folders:  {this.foldersCount}
+              </span>
+              <span>
+                &nbsp;|&nbsp;
+              </span>
+              <span>
+                Files:  {this.filesCount}
+              </span>
+              </span>
+            </div>
+          </div>
+          {this.modal}
         </div>
-        {this.modal}
       </div>
     );
   }
