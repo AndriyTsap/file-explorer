@@ -23,12 +23,21 @@ class BreadcrumbsComponent extends Component {
     }
 
     createItem(content, clickHadndler) {
-        return (
-            <span key={this.guid().toString()}>
-                <a onClick={clickHadndler}>{content}</a>
-                <span>></span>
-            </span>
-        );
+        if (clickHadndler) {
+            return (
+                <span key={this.guid().toString()}>
+                    <a onClick={clickHadndler}>{content}</a>
+                    <span>></span>
+                </span>
+            );
+        }
+        else {
+           return (
+                <span key={this.guid().toString()}>
+                    {content}
+                </span>
+            ); 
+        }
     }
 
     push(item) {
@@ -67,11 +76,6 @@ class BreadcrumbsComponent extends Component {
             this.items.unshift(this.createItem(folder.name, this.handleClick.bind(this, folder)));
         }
 
-        var root = { name: 'public', children: [folder] };
-        this.breadcrumbs.unshift(root)
-        this.items.unshift(this.createItem(root.name));
-
-        console.log(this.breadcrumbs);
         this.setState({ items: this.items });
     }
 
@@ -82,7 +86,7 @@ class BreadcrumbsComponent extends Component {
 
     render() {
         return (
-            <div>
+            <div className="breadcrumbsComponent">
                 {this.items}
             </div>
         );

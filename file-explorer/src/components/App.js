@@ -10,8 +10,10 @@ import './App.css';
 
 class App extends Component {
 
+  root;
   sidebarCatalogs = [];
   contentCatalogs = [];
+  searchResult = [];
   modal;
   breadcrumbsComponent;
   popupComponent;
@@ -25,8 +27,8 @@ class App extends Component {
       .get()
       .then(data => {
         var jData = JSON.parse(data);
+        this.root = jData;
         this.formatData(jData)
-
         this.initTree(jData)
       }, err => console.log(err));
   }
@@ -43,7 +45,7 @@ class App extends Component {
   createSidebarCatalog(key, object) {
     return (
       <SidebarFolderComponent
-        key={key} obj={object}
+        key={this.guid()} obj={object}
         dbClickHandler={this.handleSidebarFolderDoubleClick.bind(this)}>
       </SidebarFolderComponent>
     );
@@ -52,18 +54,30 @@ class App extends Component {
   createContentCatalog(key, object, clickHandler) {
     return (
       <ContentFolderComponent
-        key={key} obj={object}
-        dbClickHandler={clickHandler.bind(this)}>
+        key={this.guid()} obj={object}
+        dbClickHandler={clickHandler}>
       </ContentFolderComponent>
     );
   }
 
   createContentFile(key, object) {
     return (
-      <ContentFileComponent key={key} obj={object}
+      <ContentFileComponent key={this.guid()} obj={object}
         handleFileDoubleClick={this.handleFileDoubleClick.bind(this)}>
       </ContentFileComponent>
     );
+  }
+
+  s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+
+  guid() {
+
+    return this.s4() + this.s4() + '-' + this.s4() + '-' + this.s4() + '-' +
+      this.s4() + '-' + this.s4() + this.s4() + this.s4();
   }
 
   initTree(data) {
@@ -74,11 +88,13 @@ class App extends Component {
     );
 
     this.contentCatalogs.push(
-      this.createContentCatalog(root.name, root)
+      this.createContentCatalog("..", { name: ".." }, this.handleGoBackClick.bind(this))
     );
 
-    let obj = { name: "public" };
-    this.breadcrumbsComponent.push(obj);
+    this.contentCatalogs.push(
+      this.createContentCatalog(root.name, root, this.handleContentFolderDoubleClick.bind(this))
+    );
+
     this.setState({ contentCatalogs: this.contentCatalogs });
     this.setState({ sidebarCatalogs: this.sidebarCatalogs });
   }
@@ -89,13 +105,18 @@ class App extends Component {
   }
 
   handleContentFolderDoubleClick(folder) {
-    this.breadcrumbsComponent.push(folder);
+    this.breadcrumbsComponent.reset(folder);
     this.handleFolderDoubleClick(folder);
   }
 
-  handleGoBackClick(){
+  handleGoBackClick() {
     var breadcrumbs = this.breadcrumbsComponent.getBreadcrumbs();
-    this.breadcrumbsComponent.reset(breadcrumbs[breadcrumbs.length-2]);
+
+    if (breadcrumbs.length > 1) {
+      this.breadcrumbsComponent.reset(breadcrumbs[breadcrumbs.length - 2]);
+      this.handleFolderDoubleClick(breadcrumbs[breadcrumbs.length - 2]);
+    }
+
   }
 
   handleFolderDoubleClick(folder) {
@@ -103,7 +124,7 @@ class App extends Component {
     this.filesCount = 0;
     this.contentCatalogs = [];
     this.contentCatalogs.push(
-      this.createContentCatalog("..", {name: ".."})
+      this.createContentCatalog("..", { name: ".." }, this.handleGoBackClick.bind(this))
     );
     if (folder.children) {
       folder.children
@@ -111,7 +132,7 @@ class App extends Component {
           if (c.children) {
             this.foldersCount++;
             this.contentCatalogs.push(
-              this.createContentCatalog(c.name, c)
+              this.createContentCatalog(c.name, c, this.handleContentFolderDoubleClick.bind(this))
             );
           }
         });
@@ -129,14 +150,47 @@ class App extends Component {
   }
 
   handleFileDoubleClick(file) {
-    var breadcrumbs = this.breadcrumbsComponent.getBreadcrumbs();
+    var file1 = file;
+    var breadcrumbs = [];
+    while(file.father) {
+      breadcrumbs.unshift(file.father);
+      file = file.father;
+    }
+    console.log(breadcrumbs);
     this.modal = (
-      <PopupComponent breadcrumbs={breadcrumbs} file={file}></PopupComponent>
+      <PopupComponent breadcrumbs={breadcrumbs} file={file1}></PopupComponent>
     );
     this.setState({ modal: this.modal });
     if (document.getElementById('win')) {
       document.getElementById('win').removeAttribute('style');
     }
+  }
+
+  searchHandler(e) {
+    this.searchResult = [];
+    e.stopPropagation();
+    var breadcrumbs = this.breadcrumbsComponent.getBreadcrumbs();
+    var name = document.getElementById("Search").value;
+    if (breadcrumbs.length !== 0) {
+      var folder = breadcrumbs[breadcrumbs.length - 1];
+      this.search(folder, name);
+    }
+    else {
+      console.log(this.root);
+      this.search(this.root, name);
+    }
+    this.handleFolderDoubleClick({ name: "", children: this.searchResult });
+  }
+
+  search(folder, name) {
+    folder.children.forEach(c => {
+      if (c.name.startsWith(name)) {
+        this.searchResult.push(c);
+      }
+      if (c.children) {
+        this.search(c, name);
+      }
+    });
   }
 
   handleBreadcrumbClick(folder) {
@@ -147,10 +201,6 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
         <div className="container-fluid">
           <div className="row">
             <div className="col-md-6 col-sm-6 breadcrumbs">
@@ -162,9 +212,9 @@ class App extends Component {
             <div className="col-md-6 col-sm-6">
               <div id="custom-search-input">
                 <div className="input-group col-md-12">
-                  <input type="text" className="  search-query form-control" placeholder="Search" />
+                  <input type="text" className="  search-query form-control" id="Search" placeholder="Search" />
                   <span className="input-group-btn">
-                    <button className="btn btn-danger" type="button">
+                    <button className="btn btn-danger" type="button" onClick={this.searchHandler.bind(this)}>
                       <span className=" glyphicon glyphicon-search"></span>
                     </button>
                   </span>
@@ -173,32 +223,39 @@ class App extends Component {
             </div>
           </div>
           <div className="row">
-            <div className="col-md-3 col-sm-3 sidebarCatalogsTree">
-              <aside id="fileTree">
+            <div className="App-content">
+              <div className="col-md-3 col-sm-3 sidebarCatalogsTree">
+                <aside id="fileTree">
+                  <ul>
+                    {this.sidebarCatalogs}
+                  </ul>
+                </aside>
+              </div>
+              <div className="col-md-9 col-sm-9 contentCatalogsTree">
                 <ul>
-                  {this.sidebarCatalogs}
+                  {this.contentCatalogs}
                 </ul>
-              </aside>
-            </div>
-            <div className="col-md-9 col-sm-9 contentCatalogsTree">
-              <ul>
-                {this.contentCatalogs}
-              </ul>
+              </div>
             </div>
           </div>
           <div className="row">
-            <div className="col-md-12 col-sm-12 foother">
-            <span>
-              <span>
-                Folders:  {this.foldersCount}
+            <div className="col-md-6 col-sm-6 foother">
+              <div className="counts">
+                <span>
+                  <span>
+                    Folders:  {this.foldersCount}
+                  </span>
+                  <span>
+                    &nbsp;|&nbsp;
               </span>
-              <span>
-                &nbsp;|&nbsp;
-              </span>
-              <span>
-                Files:  {this.filesCount}
-              </span>
-              </span>
+                  <span>
+                    Files:  {this.filesCount}
+                  </span>
+                </span>
+              </div>
+            </div>
+            <div className="col-md-6 col-sm-6">
+              <img src={logo} className="App-logo" alt="logo" />
             </div>
           </div>
           {this.modal}

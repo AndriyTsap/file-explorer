@@ -25,7 +25,6 @@ class PopupComponent extends Component {
             this.setState({ content: this.content });
         }
         this.trigger = false;
-
     }
 
     shouldComponentUpdate() {
@@ -43,43 +42,45 @@ class PopupComponent extends Component {
             path += (bc.name + "/");
         });
         path += this.props.file.name;
-        if (this.props.file.type === "id") {
+        if (this.props.file.type === "image") {
             let pathS = path.split('.');
             if (pathS[pathS.length - 1] === "png") {
-                this.content = (<img className="image" src={require("../../" + pathS[pathS.length - 2] + ".png")} alt="something wrong" />);
+                this.content = (<img className="image" src={require("../../public/" + pathS[pathS.length - 2] + ".png")} alt="something wrong" />);
             }
             if (pathS[pathS.length - 1] === "jpg") {
-                this.content = (<img className="image" src={require("../../" + pathS[pathS.length - 2] + ".jpg")} alt="something wrong" />);
+                this.content = (<img className="image" src={require("../../public/" + pathS[pathS.length - 2] + ".jpg")} alt="something wrong" />);
             }
         }
-        if (this.props.file.type === "audio") {
+        else if (this.props.file.type === "audio") {
             let pathS = path.split('.');
             if (pathS[pathS.length - 1] === "mp3") {
-                this.content = (<audio id="media" src={require("../../" + pathS[pathS.length - 2].toString() + ".mp3")} controls>
+                this.content = (<audio id="media" src={require("../../public/" + pathS[pathS.length - 2].toString() + ".mp3")} controls>
                     Your browser does not support the <code>audio</code> element.
                 </audio>);
             }
             if (pathS[pathS.length - 1] === "wav") {
-                this.content = (<audio id="media" src={require("../../" + pathS[pathS.length - 2].toString() + ".wav")} controls>
+                this.content = (<audio id="media" src={require("../../public/" + pathS[pathS.length - 2].toString() + ".wav")} controls>
                     Your browser does not support the <code>audio</code> element.
                 </audio>);
             }
         }
-        if (this.props.file.type === "video") {
+        else if (this.props.file.type === "video") {
             let pathS = path.split('.');
             if (pathS[pathS.length - 1] === "mp4") {
-                this.content = (<video id="media" src={require("../../" + pathS[pathS.length - 2].toString() + ".mp4")} controls>
+                this.content = (<video id="media" src={require("../../public/" + pathS[pathS.length - 2].toString() + ".mp4")} controls>
                     Your browser does not support the <code>audio</code> element.
                 </video>);
             }
             if (pathS[pathS.length - 1] === "avi") {
-                this.content = (<video id="media" src={require("../../" + pathS[pathS.length - 2].toString() + ".avi")} controls>
+                this.content = (<video id="media" src={require("../../public/" + pathS[pathS.length - 2].toString() + ".avi")} controls>
                     Your browser does not support the <code>audio</code> element.
                 </video>);
             }
         }
-        this.content = (<h3>Previeving this type of files is not supported</h3>);
-        this.setState({content: this.content});
+        else {
+            this.content = (<h3>Previeving this type of files is not supported</h3>);
+        }
+        //this.setState({ content: this.content });
     }
 
     closeModal() {
@@ -97,7 +98,7 @@ class PopupComponent extends Component {
                     <div className="header">
                         <span>
                             <h2>{this.props.file.name}</h2>
-                            <button type="button" onClick={this.closeModal.bind(this)}>закрыть</button>
+                            <button type="button" onClick={this.closeModal.bind(this)}>close</button>
                         </span>
                     </div>
                     <div className="content">

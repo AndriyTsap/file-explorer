@@ -1,11 +1,39 @@
-.file{
-    width: 60%;
+li{
+    cursor: pointer;
+    position: relative;
+    left: 0;
+
 }
 
-.date{
-    width: 20%;
+li .file{
+    display: inline-block;
+    padding: 0.8em 0.7em 0 0;
+    line-height: 1em;
+    position: relative;
+    left: -1px;
+    top: -4px;
+    margin-right: .8em;
+    min-width: 400px;
+}
+
+li .date{
+    display: inline-block;
+    padding: 0.8em 0.7em 0 0;
+    line-height: 1em;
+    position: relative;
+    left: -1px;
+    top: -4px;
+    margin-right: .8em;
+    min-width: 200px;
 }
 
 .size{
-    width: 20%;
+    display: inline-block;
+    padding: 0.8em 0.7em 0 0;
+    line-height: 1em;
+    position: relative;
+    left: -1px;
+    top: -4px;
+    margin-right: .8em;
+    min-width: 100px;
 }

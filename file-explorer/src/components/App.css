@@ -1,4 +1,4 @@
-.folder{
+.folder, .App-content{
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
@@ -6,8 +6,9 @@
 }
 
 #custom-search-input {
-        margin:0;
+        float: left;
         margin-top: 10px;
+        margin-bottom: 10px;
         padding: 0;
     }
  
@@ -44,10 +45,23 @@
         z-index: 3;   
     }
 
-
 .breadcrumbs{
-  display:inline;
+  float: left;
+  margin-top: 15px;
+  margin-bottom: 10px;
   vertical-align: middle;
+}
+
+.breadcrumbsComponent a{
+  cursor: pointer;
+}
+
+.App-content{
+  min-height: 87vh;
+}
+
+.foother > .counts{
+   padding-top: 10px;
 }
 
 ul {
@@ -63,20 +77,35 @@ li {
 }
 
 .App-logo {
+  float: right;
   animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+  height: 40px;
 }
 
-.row{
-  border: 2px;
+div.row { 
+  overflow: hidden;
+  border: 1px solid #ccc;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
 }
 
-.sidebarCatalogsTree{
-  border: 2px;
+div .row .sidebarCatalogsTree{
+  margin-bottom: -9999px;
+  padding-bottom: 9999px;  
+  border: 1px solid #ccc;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
 }
 
-.contentCatalogsTree{
-  border: 2px;
+div .row .contentCatalogsTree{
+  margin-bottom: -9999px;
+  padding-bottom: 9999px;
+  border: 1px solid #ccc;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
 }
 
 .App-header {

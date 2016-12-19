@@ -76,7 +76,7 @@ class SidebarFolderComponent extends Component {
             <ul>
                 <li>
                     <i className={this.arrow} onClick={this.handleArrowClick.bind(this)}></i>
-                    <span className="folder" onDoubleClick={this.handleFolderDoubleClick.bind(this)}>
+                    <span className="folder" onClick={this.handleFolderDoubleClick.bind(this)}>
                         <i className={this.folder}></i>
                         {this.props.obj.name}
                         {this.children}
